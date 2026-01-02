@@ -15,6 +15,7 @@ class GameScene(BaseScene):
         self.hud = HUD()
 
         self.score = 0
+        self.milestone_1000_shown = False
         self.alive = True
         self.enemies = self.enemy_manager.enemies
 
@@ -35,6 +36,10 @@ class GameScene(BaseScene):
         self.enemy_manager.update(dt)
 
         self.score += int(60 * dt)
+        if (not self.milestone_1000_shown) and self.score >= 1000:
+            self.milestone_1000_shown = True
+            # orange banner like START
+            self.road.show_banner("1000 POINTS", bg=(255, 140, 0), fg=(20, 20, 20), y=-60)
         self.hud.set_score(self.score)
         self.hud.set_speed(self.enemy_manager.enemy_speed)
 

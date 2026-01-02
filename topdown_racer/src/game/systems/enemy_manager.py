@@ -31,12 +31,19 @@ class EnemyManager:
             self._spawn_enemy()
 
         for e in list(self.enemies):
-            e.speed = self.enemy_speed
+            e.set_base_speed(self.enemy_speed)
             e.update(dt)
             if e.rect.top > Settings.HEIGHT + 60:
-                e.kill()
+               e.kill()
 
     def _spawn_enemy(self):
-        x = int(random.choice(self.lanes))
-        y = -60
-        self.enemies.add(Enemy(x, y, self.enemy_speed))
+        enemy_type = random.choices(
+            population=["compact", "sedan", "truck"],
+            weights=[0.45, 0.40, 0.15],
+            k=1
+        )[0]
+
+        lane_index = random.randrange(len(self.lanes))
+        y = -70
+        self.enemies.add(Enemy(self.lanes, lane_index, y, self.enemy_speed, enemy_type))
+
