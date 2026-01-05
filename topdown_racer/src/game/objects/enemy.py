@@ -26,6 +26,39 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.Surface((w, h), pygame.SRCALPHA)
         pygame.draw.rect(self.image, body, (0, 0, w, h), border_radius=6)
         pygame.draw.rect(self.image, window, (6, 8, w - 12, 18), border_radius=4)
+        
+        # rear window (small)
+        rear_w = w - 16
+        rear_h = max(8, h // 6)
+        rear_x = 8
+        rear_y = int(h * 0.62)
+
+        pygame.draw.rect(self.image, window, (rear_x, rear_y, rear_w, rear_h), border_radius=4)
+
+        # --- wheels (4 tires) ---
+        tire = (10, 10, 10)
+        rim = (35, 35, 35)
+
+        tire_w = 6
+        tire_h = 10
+
+        # positions (front/rear)
+        y_front = 10
+        y_rear = h - tire_h - 10
+
+        # left tires (slightly outside body)
+        pygame.draw.rect(self.image, tire, (-2, y_front, tire_w, tire_h), border_radius=2)
+        pygame.draw.rect(self.image, tire, (-2, y_rear, tire_w, tire_h), border_radius=2)
+
+        # right tires
+        pygame.draw.rect(self.image, tire, (w - 4, y_front, tire_w, tire_h), border_radius=2)
+        pygame.draw.rect(self.image, tire, (w - 4, y_rear, tire_w, tire_h), border_radius=2)
+
+        # tiny rims (optional, adds detail)
+        pygame.draw.rect(self.image, rim, (-1, y_front + 3, tire_w - 2, 4), border_radius=2)
+        pygame.draw.rect(self.image, rim, (-1, y_rear + 3, tire_w - 2, 4), border_radius=2)
+        pygame.draw.rect(self.image, rim, (w - 3, y_front + 3, tire_w - 2, 4), border_radius=2)
+        pygame.draw.rect(self.image, rim, (w - 3, y_rear + 3, tire_w - 2, 4), border_radius=2)
 
         self.lane_centers = lane_centers
         self.lane_index = max(0, min(lane_index, len(lane_centers) - 1))

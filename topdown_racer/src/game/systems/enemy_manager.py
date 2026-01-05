@@ -23,7 +23,10 @@ class EnemyManager:
 
     def update(self, dt: float):
         self.elapsed += dt
-        self.enemy_speed = Settings.ENEMY_BASE_SPEED + (self.elapsed * 80 * Settings.DIFFICULTY_RAMP)
+
+        mult = Settings.speed_mult()
+        base = (Settings.ENEMY_BASE_SPEED + (self.elapsed * 80 * Settings.DIFFICULTY_RAMP)) * mult
+        self.enemy_speed = base
 
         self.spawn_timer += dt
         if self.spawn_timer >= self.spawn_interval:
@@ -31,10 +34,11 @@ class EnemyManager:
             self._spawn_enemy()
 
         for e in list(self.enemies):
-            e.set_base_speed(self.enemy_speed)
+            e.set_base_speed(self.enemy_speed * 0.70)  # враги чуть быстрее разметки
             e.update(dt)
-            if e.rect.top > Settings.HEIGHT + 60:
-               e.kill()
+
+            if e.rect.top > Settings.HEIGHT + 120:
+                e.kill()
 
     def _spawn_enemy(self):
         enemy_type = random.choices(
@@ -46,4 +50,3 @@ class EnemyManager:
         lane_index = random.randrange(len(self.lanes))
         y = -70
         self.enemies.add(Enemy(self.lanes, lane_index, y, self.enemy_speed, enemy_type))
-
